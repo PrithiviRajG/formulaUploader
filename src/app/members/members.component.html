@@ -1,7 +1,7 @@
 <div class="form-container" id="toolbar">
-    <header [@fallIn]="state">
+  <md-toolbar color="primary" [@fallIn]="state">
       <button (click)="logout()" class="basic-btn">Logout</button>
-    </header>
+  </md-toolbar>
     <div id="page" [@moveInLeft]="state">
       <h2>Hey {{ name.auth.displayName }}!</h2>
 
