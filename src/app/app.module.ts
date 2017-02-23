@@ -35,6 +35,7 @@ export const firebaseConfig = {
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    
     routes,
     MaterialModule
   ],

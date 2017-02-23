@@ -6,15 +6,16 @@
       <h2>Hey {{ name.auth.displayName }}!</h2>
 
       <p> Type text (mixed with MathML, TeX or asciimath) in the box below for a live preview.</p>
-      <textarea id="MathInput" cols="60" rows="10" onkeyup="Preview.Update()" style="margin-top:5px">
+      <textarea id="MathInput" cols="60" rows="10"
+      (keyup)="Update()" style="margin-top:5px" [(ngModel)]="formula">
 </textarea>
-<p>Configured delimiters:
-<ul>
-<li>TeX, inline mode: <code>\(...\)</code> or <code>$...$</code></li>
-<li>TeX, display mode: <code>\[...\]</code> or <code> $$...$$</code></li>
-<li>Asciimath: <code>`...`</code>.</li>
-</ul>
-</p>
+<p>Configured delimiters:</p>
+  <ul>
+  <li>TeX, inline mode: <code>\(...\)</code> or <code>$...$</code></li>
+  <li>TeX, display mode: <code>\[...\]</code> or <code> $$...$$</code></li>
+  <li>Asciimath: <code>`...`</code>.</li>
+  </ul>
+
 
 <p>Preview is shown here:</p>
 <div id="MathPreview" style="border:1px solid; padding: 3px; width:50%; margin-top:5px"></div>
