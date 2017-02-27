@@ -1,9 +1,19 @@
 <div class="form-container" id="toolbar">
   <md-toolbar color="primary" [@fallIn]="state">
-      <button (click)="logout()" class="basic-btn">Logout</button>
+    <button class="logout" (click)="logout()" md-button>Logout</button>
   </md-toolbar>
     <div id="page" [@moveInLeft]="state">
       <h2>Hey {{ name.auth.displayName }}!</h2>
+
+      <form>
+        <md-select placeholder="Select heading" [(ngModel)]="selectedHeading" name="heading">
+          <md-option *ngFor="let heading of contents" [value]="food.value">
+            {{heading.viewValue}}
+          </md-option>
+        </md-select>
+
+        <p> Selected value: {{selectedValue}} </p>
+</form>
 
       <p> Type text (mixed with MathML, TeX or asciimath) in the box below for a live preview.</p>
       <textarea id="MathInput" cols="60" rows="10"
