@@ -14,6 +14,9 @@ import { MembersComponent } from './members/members.component';
 import { AuthguardService } from './authguard.service';
 import { routes } from './app.routes';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import 'hammerjs';
+
 export const firebaseConfig = {
     apiKey: "AIzaSyCf0rNwruACEzEisgmQhGP-I1xKaTPqopQ",
     authDomain: "forumulaeuploader.firebaseapp.com",
@@ -35,9 +38,10 @@ export const firebaseConfig = {
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    
+
     routes,
-    MaterialModule
+    MaterialModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthguardService],
   bootstrap: [AppComponent]

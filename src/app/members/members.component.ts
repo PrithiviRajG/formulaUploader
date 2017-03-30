@@ -26,30 +26,7 @@ export class MembersComponent  {
   oldText: any= null;     // used to check if an update is needed
   formula : any;
 
-  contents : any ={
-  "headings": {
-    "Number Sets": {
-      "subHeadings1": [
-        "Set Identities",
-        "Sets of Numbers",
-        "Basic Identities",
-        "Complex Numbers"
-      ]
-    },
-    "Algebra": {
-      "subHeadings1": [
-        "Factoring Formulas",
-        "Product Formulas",
-        "Powers",
-        "Roots",
-        "Logarithms",
-        "Equations",
-        "Inequalities",
-        "Compound Interest Formulas\n"
-      ]
-    }
-  }
-}
+
 
   constructor(public af: AngularFire,private router: Router) {
     this.af.auth.subscribe(auth => {
