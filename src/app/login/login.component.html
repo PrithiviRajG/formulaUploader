@@ -1,11 +1,52 @@
-<div class="form-container">
-  <img src="assets/images/lock.svg" id="lock">
 
-    <span class="error" *ngIf="error">{{ error }}</span>
+<md-toolbar color="primary">
+  <span>Upload Formula</span>
+</md-toolbar>
+<div class="pad-top-10 pad-left-30 pad-right-30 backClr">
+      <md-card> 
 
-  <button (click)="loginFb()" id="fb">Login With Facebook</button><br>
-  <button (click)="loginGoogle()" id="google">Login With Google</button>
-  <button routerLink="/login-email" id="email">Email</button>
+        <span class="error" *ngIf="error">{{ error }}</span><br>
 
-  <a routerLink="/signup" routerLinkActive="active" class="alc">No account? <strong>Create one here</strong></a>
+      
+
+        
+
+        <md-grid-list cols="4">
+          <md-grid-tile
+              [colspan]="4"
+              [rowspan]="1"
+              >
+             <button (click)="loginFb()" class="loginBtn loginBtn--facebook">
+          Login with Facebook
+        </button>
+          </md-grid-tile>
+
+          <md-grid-tile
+              [colspan]="4"
+              [rowspan]="1"
+              >
+        <button (click)="loginGoogle()" class="loginBtn loginBtn--google">
+          Login with Google
+        </button><br>
+          </md-grid-tile>
+
+           <!--<md-grid-tile
+              [colspan]="4"
+              [rowspan]="1"
+              >
+         <a routerLink="/signup" routerLinkActive="active" class="alc">No account? <strong>Create one here</strong></a>
+          </md-grid-tile>-->
+
+        </md-grid-list>
+
+        
+       
+  
+
+          
+        <!--<button class="loginBtn" routerLink="/login-email">Email</button><br>-->
+
+       
+      
+      </md-card>
 </div>

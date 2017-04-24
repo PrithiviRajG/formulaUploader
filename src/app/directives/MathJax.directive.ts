@@ -1,3 +1,4 @@
+/*
 import {Directive, ElementRef, Input, Component} from '@angular/core';
 @Directive({
     selector: '[MathJax]'
@@ -16,3 +17,5 @@ export class MathJaxDirective {
       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.el.nativeElement])');
     }
 }
+
+*/
