@@ -1,10 +1,10 @@
-import { FormulaeUploaderAppPage } from './app.po';
+import { SampleAppPage } from './app.po';
 
-describe('formulae-uploader-app App', function() {
-  let page: FormulaeUploaderAppPage;
+describe('sample-app App', () => {
+  let page: SampleAppPage;
 
   beforeEach(() => {
-    page = new FormulaeUploaderAppPage();
+    page = new SampleAppPage();
   });
 
   it('should display message saying app works', () => {
