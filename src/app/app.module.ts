@@ -16,6 +16,10 @@ import { routes } from './app.routes';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import 'hammerjs';
+import {MdButtonModule, MdCheckboxModule,
+  MdToolbarModule,MdCardModule,MdGridListModule,
+  MdSelectModule,MdChipsModule,MdSlideToggleModule,
+  MdInputModule,MdProgressBarModule} from '@angular/material';
 
 export const firebaseConfig = {
     apiKey: "AIzaSyCf0rNwruACEzEisgmQhGP-I1xKaTPqopQ",
@@ -41,7 +45,10 @@ export const firebaseConfig = {
 
     routes,
     MaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,MdButtonModule, MdCheckboxModule,
+  MdToolbarModule,MdCardModule,MdGridListModule,
+  MdSelectModule,MdChipsModule,MdSlideToggleModule,
+  MdInputModule,MdProgressBarModule
   ],
   providers: [AuthguardService],
   bootstrap: [AppComponent]

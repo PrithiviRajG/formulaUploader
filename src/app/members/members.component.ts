@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ElementRef,Input } from '@angular/core';
 import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
 
 import { Router } from '@angular/router';
 import { moveIn, fallIn, moveInLeft } from '../router.animation';
+
+import { AngularFireDatabase,FirebaseListObservable } from 'angularfire2/database';
 
 
 @Component({
@@ -26,14 +28,37 @@ export class MembersComponent  {
   oldText: any= null;     // used to check if an update is needed
   formula : any;
 
+   items: FirebaseListObservable<any>;
+   firebaseFormula : any;
+   
+   //@Input('MathJax') MathJaxInput: string;
 
-
-  constructor(public af: AngularFire,private router: Router) {
+  constructor(public af: AngularFire,private router: Router,
+  private db: AngularFireDatabase,private el: ElementRef) {
     this.af.auth.subscribe(auth => {
       if(auth) {
-        this.name = auth;
+        this.name = auth; 
+        this.items=this.db.list('/algebra');
       }
-    });
+  })
+
+  this.items.subscribe((data)=>{
+    if(data!=null){
+      let mathjax=document.getElementsByClassName('mathjax');
+       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+      eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+    }
+  })  
+  
+    }
+    
+  
+
+  
+
+   saveFormula(){
+     const formulas = this.db.list('/algebra');
+     formulas.push({ basic : this.formula });
    }
 
    /*
@@ -42,6 +67,7 @@ export class MembersComponent  {
   ngAfterContentInit() {
     this.preview = document.getElementById("MathPreview");
     this.buffer = document.getElementById("MathBuffer");
+     
   }
 
 /*  Switch the buffer and preview, and display the right one.

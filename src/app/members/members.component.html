@@ -1,5 +1,6 @@
-<div class="form-container" id="toolbar">
+
   <md-toolbar color="primary" [@fallIn]="state">
+    
     <button class="logout" (click)="logout()" md-button>Logout</button>
   </md-toolbar>
   <md-card>
@@ -27,8 +28,17 @@
 <div id="MathPreview" style="border:1px solid; padding: 3px; width:50%; margin-top:5px"></div>
 <div id="MathBuffer" style="border:1px solid; padding: 3px; width:50%; margin-top:5px;
 visibility:hidden; position:absolute; top:0; left: 0"></div>
-
-
     </div>
+    <button md-raised-button (click)="saveFormula()">Save Formula</button>
   </md-card>
-</div>
+<div id="fetchedFormula">
+  <ul>
+    <li *ngFor="let item of items | async">
+      
+       <div class="mathjax" >{{ item.basic }}</div>
+    </li>
+  </ul>
+  </div>
+
+  
+
