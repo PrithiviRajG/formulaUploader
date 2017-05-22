@@ -4,7 +4,11 @@ import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
 import { Router } from '@angular/router';
 import { moveIn, fallIn, moveInLeft } from '../router.animation';
 
-import { AngularFireDatabase,FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase,FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+
+import {Tier1} from'../transferObjects/tier1TO';
+import {Tier2} from'../transferObjects/tier2TO';
+import {Tier3} from'../transferObjects/tier3TO';
 
 
 @Component({
@@ -16,6 +20,18 @@ import { AngularFireDatabase,FirebaseListObservable } from 'angularfire2/databas
 
 })
 export class MembersComponent  {
+
+    selectedTier: string='Single Tier';
+
+  tiers= [
+    'Single Tier',
+    'Two Tier',
+    'Three Tier'
+  ];
+
+  tier1 : Tier1;
+  tier2 : Tier2;
+  tier3 : Tier3;
 
   name: any;
   state: string = '';
@@ -29,12 +45,14 @@ export class MembersComponent  {
   formula : any;
 
    items: FirebaseListObservable<any>;
+   objectItems : FirebaseObjectObservable<any>;
    firebaseFormula : any;
    
    //@Input('MathJax') MathJaxInput: string;
 
   constructor(public af: AngularFire,private router: Router,
   private db: AngularFireDatabase,private el: ElementRef) {
+    this.tier1=new Tier1();
     this.af.auth.subscribe(auth => {
       if(auth) {
         this.name = auth; 
@@ -59,6 +77,12 @@ export class MembersComponent  {
    saveFormula(){
      const formulas = this.db.list('/algebra');
      formulas.push({ basic : this.formula });
+   }
+
+   saveTierLevel(){
+     console.log(this.tier1);
+     const itemObservable = this.db.object('/object');
+itemObservable.set(this.tier1);
    }
 
    /*

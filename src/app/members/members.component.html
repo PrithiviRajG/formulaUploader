@@ -1,20 +1,52 @@
 
+  <div id="page" [@moveInLeft]="state">
+
   <md-toolbar color="primary" [@fallIn]="state">
-    
+    <span>Formula Repository</span>    
     <button class="logout" (click)="logout()" md-button>Logout</button>
   </md-toolbar>
+
+<md-card>
+  <md-radio-group class="example-radio-group"  [(ngModel)]="selectedTier">
+  <md-radio-button class="example-radio-button"  *ngFor="let tier of tiers"   [value]="tier">
+    {{tier}}
+  </md-radio-button>
+  
+</md-radio-group>
+</md-card >
+  <md-card *ngIf="selectedTier==='Single Tier' || selectedTier==='Two Tier' || selectedTier==='Three Tier'">
+    <md-input-container class="example-half-width">
+      <input mdInput placeholder="Tier 1 title"  [(ngModel)]="tier1.title">
+    </md-input-container>
+    <md-input-container class="example-half-width">
+      <textarea mdInput placeholder="Tier 1 description" [(ngModel)]="tier1.description"></textarea>
+    </md-input-container>
+  </md-card>
+
+  <md-card *ngIf="selectedTier==='Two Tier' || selectedTier==='Three Tier'">
+    <md-input-container class="example-half-width">
+      <input mdInput placeholder="Tier 2 title" [(ngModel)]="tier1.tier2.title">
+    </md-input-container>
+    <md-input-container class="example-half-width">
+      <textarea mdInput placeholder="Tier 2 description"[(ngModel)]="tier1.tier2.description"></textarea>
+    </md-input-container>
+  </md-card>
+
+  <md-card *ngIf="selectedTier==='Three Tier'">
+    <md-input-container class="example-half-width">
+      <input mdInput placeholder="Tier 3 title" [(ngModel)]="tier1.tier2.tier3.title">
+    </md-input-container>
+    <md-input-container class="example-half-width">
+      <textarea mdInput placeholder="Tier 3 description" [(ngModel)]="tier1.tier2.tier3.description"></textarea>
+    </md-input-container>
+  </md-card>
+
   <md-card>
-    <div id="page" [@moveInLeft]="state">
-      <h2>Hey {{ name.auth.displayName }}!</h2>
       <p> Type text (mixed with MathML, TeX or asciimath) in the box below for a live preview.</p>
-      <!--<md-input-container>
-        <textarea mdInput
-                  mdTextareaAutosize
-                  placeholder="Autosized textarea"></textarea>
-      </md-input-container>-->
+      
       <textarea id="MathInput" cols="60" rows="10"
-      (keyup)="Update()" style="margin-top:5px" [(ngModel)]="formula">
-</textarea>
+        (keyup)="Update()" style="margin-top:5px" [(ngModel)]="formula">
+      </textarea>
 <p>Configured delimiters:</p>
   <ul>
   <li>TeX, inline mode: <code>\(...\)</code> or <code>$...$</code></li>
@@ -28,8 +60,8 @@
 <div id="MathPreview" style="border:1px solid; padding: 3px; width:50%; margin-top:5px"></div>
 <div id="MathBuffer" style="border:1px solid; padding: 3px; width:50%; margin-top:5px;
 visibility:hidden; position:absolute; top:0; left: 0"></div>
-    </div>
-    <button md-raised-button (click)="saveFormula()">Save Formula</button>
+    
+    <button md-raised-button (click)="saveTierLevel()">Save Formula</button>
   </md-card>
 <div id="fetchedFormula">
   <ul>
@@ -38,6 +70,9 @@ visibility:hidden; position:absolute; top:0; left: 0"></div>
        <div class="mathjax" >{{ item.basic }}</div>
     </li>
   </ul>
+  </div>
+
+
   </div>
 
   
