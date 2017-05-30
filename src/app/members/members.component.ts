@@ -57,6 +57,7 @@ export class MembersComponent  {
     this.af.auth.subscribe(auth => {
       if(auth) {
         this.name = auth; 
+        this.items=this.db.list('/contents');
       }
   })
 
@@ -72,6 +73,7 @@ export class MembersComponent  {
 
     addTier1(){
       const formulas = this.db.list('/contents');
+     formulas.push({ tier1Title : this.tier1.title });
     }
     
   
