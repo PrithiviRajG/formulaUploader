@@ -45,6 +45,7 @@ export class MembersComponent  {
   formula : any;
 
    items: FirebaseListObservable<any>;
+   updateTiers: FirebaseListObservable<any>;
    objectItems : FirebaseObjectObservable<any>;
    firebaseFormula : any;
    
@@ -56,7 +57,6 @@ export class MembersComponent  {
     this.af.auth.subscribe(auth => {
       if(auth) {
         this.name = auth; 
-        this.items=this.db.list('/algebra');
       }
   })
 
@@ -68,6 +68,10 @@ export class MembersComponent  {
     }
   })  
   
+    }
+
+    addTier1(){
+      const formulas = this.db.list('/contents');
     }
     
   
@@ -81,8 +85,23 @@ export class MembersComponent  {
 
    saveTierLevel(){
      console.log(this.tier1);
-     const itemObservable = this.db.object('/object');
-itemObservable.set(this.tier1);
+     const tier1 = this.db.list('/'+this.tier1.title);
+     const tier2DB =this.db.list('/'+this.tier1.title,{
+  query: {
+    orderByChild: 'size',
+    equalTo: this.tier1.title,
+    orderByKey: true,
+  }
+     });
+     const tier3=null;
+     if(this.tier1.tier2!=undefined && this.tier1.tier2!=null && this.tier1.tier2.title!=null){
+       tier1.push(this.tier1.tier2.title);
+       
+     }
+     if(this.tier1.tier2!=undefined && this.tier1.tier2!=null
+     && this.tier1.tier2.tier3!=undefined && this.tier1.tier2.tier3!=null && this.tier1.tier2.tier3.title!=null){
+       tier2DB.push(this.tier1.tier2.tier3.title);
+     }
    }
 
    /*

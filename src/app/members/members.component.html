@@ -11,7 +11,6 @@
   <md-radio-button class="example-radio-button"  *ngFor="let tier of tiers"   [value]="tier">
     {{tier}}
   </md-radio-button>
-  
 </md-radio-group>
 </md-card >
   <md-card *ngIf="selectedTier==='Single Tier' || selectedTier==='Two Tier' || selectedTier==='Three Tier'">
@@ -21,6 +20,7 @@
     <md-input-container class="example-half-width">
       <textarea mdInput placeholder="Tier 1 description" [(ngModel)]="tier1.description"></textarea>
     </md-input-container>
+     <button md-button (click)="addTier1()">Add tier 1 </button>
   </md-card>
 
   <md-card *ngIf="selectedTier==='Two Tier' || selectedTier==='Three Tier'">
