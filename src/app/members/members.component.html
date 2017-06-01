@@ -24,12 +24,17 @@
   </md-card>
 
   <md-card *ngIf="selectedTier==='Two Tier' || selectedTier==='Three Tier'">
+
+    <md-select placeholder="Tier1 Title">
+  <md-option *ngFor="let item of items | async" [value]="item.tier1Title">
+    {{ item.tier1Title }}
+  </md-option>
+</md-select>
+
     <md-input-container class="example-half-width">
       <input mdInput placeholder="Tier 2 title" [(ngModel)]="tier1.tier2.title">
     </md-input-container>
-    <md-input-container class="example-half-width">
-      <textarea mdInput placeholder="Tier 2 description"[(ngModel)]="tier1.tier2.description"></textarea>
-    </md-input-container>
+    
   </md-card>
 
   <md-card *ngIf="selectedTier==='Three Tier'">
