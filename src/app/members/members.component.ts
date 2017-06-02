@@ -33,6 +33,8 @@ export class MembersComponent  {
   tier2 : Tier2;
   tier3 : Tier3;
 
+  selectedTier1Title : any;
+
   name: any;
   state: string = '';
   delay: any = 150;        // delay after keystroke before updating
@@ -44,8 +46,10 @@ export class MembersComponent  {
   oldText: any= null;     // used to check if an update is needed
   formula : any;
 
-   items: FirebaseListObservable<any>;
-   updateTiers: FirebaseListObservable<any>;
+   contentsRef: FirebaseListObservable<any>;
+   contentsRefSnapShot: FirebaseListObservable<any>;
+   tier1Ref :FirebaseListObservable<any>;
+   
    objectItems : FirebaseObjectObservable<any>;
    firebaseFormula : any;
    
@@ -54,14 +58,17 @@ export class MembersComponent  {
   constructor(public af: AngularFire,private router: Router,
   private db: AngularFireDatabase,private el: ElementRef) {
     this.tier1=new Tier1();
+    this.tier2=new Tier2();
+    this.tier3=new Tier3();
     this.af.auth.subscribe(auth => {
       if(auth) {
         this.name = auth; 
-        this.items=this.db.list('/contents');
+        this.contentsRef=this.db.list('/contents');
+        this.contentsRefSnapShot=this.db.list('/contents', { preserveSnapshot: true });
       }
   })
 
-  this.items.subscribe((data)=>{
+  this.contentsRef.subscribe((data)=>{
     if(data!=null){
       let mathjax=document.getElementsByClassName('mathjax');
        eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
@@ -74,6 +81,24 @@ export class MembersComponent  {
     addTier1(){
       const formulas = this.db.list('/contents');
      formulas.push({ tier1Title : this.tier1.title });
+    }
+
+    addTier2(){
+      let tier1TitleKey : any;
+      this.contentsRefSnapShot.subscribe(snapshots => {
+        snapshots.forEach(snapshot => {
+          console.log("key"+snapshot.key);
+          console.log("value - title"+snapshot.val().tier1Title);
+          if(this.selectedTier1Title===snapshot.val().tier1Title){
+            tier1TitleKey=snapshot.key;
+          }  
+        });
+      });
+
+      if(tier1TitleKey!=null && tier1TitleKey!='' && tier1TitleKey!=undefined){
+        const tier1Ref =  this.db.list('/contents/'+tier1TitleKey);
+            tier1Ref.push({ tier2Title : this.tier2.title });
+      }
     }
     
   
