@@ -8,43 +8,113 @@
 
 <md-card>
   <md-radio-group class="example-radio-group"  [(ngModel)]="selectedTier">
-  <md-radio-button class="example-radio-button"  *ngFor="let tier of tiers"   [value]="tier">
+  <md-radio-button (change)="TierOptionChange()" class="example-radio-button"  *ngFor="let tier of tiers"   [value]="tier">
     {{tier}}
   </md-radio-button>
 </md-radio-group>
 </md-card >
-  <md-card *ngIf="selectedTier==='Single Tier' || selectedTier==='Two Tier' || selectedTier==='Three Tier'">
+
+  <md-card *ngIf="selectedTier==='Add First Tier'">
     <md-input-container class="example-half-width">
       <input mdInput placeholder="Tier 1 title"  [(ngModel)]="tier1.title">
     </md-input-container>
-    <md-input-container class="example-half-width">
-      <textarea mdInput placeholder="Tier 1 description" [(ngModel)]="tier1.description"></textarea>
-    </md-input-container>
+   
      <button md-button (click)="addTier1()">Add tier 1 </button>
+
+     <div id="tier1Titles">
+        <ul>
+          <li *ngFor="let content of contentsRefSnapShot | async">
+            
+            <div class="mathjax" >{{ content.val().tier1Title }}</div>
+          </li>
+        </ul>
+      </div>
+
   </md-card>
 
-  <md-card *ngIf="selectedTier==='Two Tier' || selectedTier==='Three Tier'">
-    <md-select placeholder="Tier1 Title"  [(ngModel)]="selectedTier1Title">
-      <md-option *ngFor="let content of contentsRef | async" [value]="content.tier1Title">
-        {{ content.tier1Title }}
+  <md-card *ngIf="selectedTier==='Add Second Tier'">
+    
+    <md-select (change)="onTier1Change()"  placeholder="Tier1 Title"  [(ngModel)]="selectedTier1Key">
+      <md-option *ngFor="let content of contentsRefSnapShot | async" [value]="content.key">
+        {{ content.val().tier1Title }}
       </md-option>
     </md-select>
-    <md-input-container class="example-half-width">
+
+   
+
+    <md-input-container  *ngIf="selectedTier1Key!=''" class="example-half-width">
       <input mdInput placeholder="Tier 2 title" [(ngModel)]="tier2.title">
     </md-input-container>
     <button md-button (click)="addTier2()">Add tier 2 </button>  
+
+    <div *ngIf="selectedTier1Key!=''" id="tier2Titles">
+        <ul>
+          <li *ngFor="let content of tier1RefSnapShot | async">
+            
+            <div class="mathjax" >{{ content.val().tier2Title }}</div>
+          </li>
+        </ul>
+      </div>
+
   </md-card>
 
-  <md-card *ngIf="selectedTier==='Three Tier'">
-    <md-input-container class="example-half-width">
-      <input mdInput placeholder="Tier 3 title" [(ngModel)]="tier1.tier2.tier3.title">
+  <md-card *ngIf="selectedTier==='Add Third Tier'">
+   <md-select (change)="onTier1Change()"  placeholder="Tier1 Title"  [(ngModel)]="selectedTier1Key">
+      <md-option *ngFor="let content of contentsRefSnapShot | async" [value]="content.key">
+        {{ content.val().tier1Title }}
+      </md-option>
+    </md-select>
+
+     <md-select (change)="onTier2Change()" *ngIf="selectedTier1Key!=null && selectedTier1Key!=undefined && selectedTier1Key!=''"
+      placeholder="Tier2 Title"  [(ngModel)]="selectedTier2Key">
+      <md-option  
+      *ngFor="let content of tier1RefSnapShot | async" [value]="content.key">
+        {{ content.val().tier2Title }}
+      </md-option>
+    </md-select>
+
+    <md-input-container *ngIf="selectedTier2Key!=null && selectedTier2Key!=undefined && selectedTier2Key!=''"
+     class="example-half-width">
+      <input mdInput placeholder="Tier 3 title" [(ngModel)]="tier3.title">
     </md-input-container>
-    <md-input-container class="example-half-width">
-      <textarea mdInput placeholder="Tier 3 description" [(ngModel)]="tier1.tier2.tier3.description"></textarea>
-    </md-input-container>
+
+    <button md-button (click)="addTier3()">Add tier 3 </button>  
+
+    <div *ngIf="selectedTier2Key!=''" id="tier3Titles">
+        <ul>
+          <li *ngFor="let content of tier2RefSnapShot | async">
+            
+            <div class="mathjax" >{{ content.val().tier3Title }}</div>
+          </li>
+        </ul>
+      </div>
+
   </md-card>
 
-  <md-card>
+  <md-card *ngIf="selectedTier==='Add Formula'">
+
+     <md-select (change)="onTier1Change()"  placeholder="Tier1 Title"  [(ngModel)]="selectedTier1Key">
+      <md-option *ngFor="let content of contentsRefSnapShot | async" [value]="content.key">
+        {{ content.val().tier1Title }}
+      </md-option>
+    </md-select>
+
+     <md-select (change)="onTier2Change()" *ngIf="selectedTier1Key!=null && selectedTier1Key!=undefined && selectedTier1Key!=''"
+      placeholder="Tier2 Title"  [(ngModel)]="selectedTier2Key">
+      <md-option  
+      *ngFor="let content of tier1RefSnapShot | async" [value]="content.key">
+        {{ content.val().tier2Title }}
+      </md-option>
+    </md-select>
+
+     <md-select *ngIf="selectedTier2Key!=null && selectedTier2Key!=undefined && selectedTier2Key!=''"
+      placeholder="Tier3 Title"  [(ngModel)]="selectedTier3Key">
+      <md-option  
+      *ngFor="let content of tier2RefSnapShot | async" [value]="content.key">
+        {{ content.val().tier3Title }}
+      </md-option>
+    </md-select>
+
       <p> Type text (mixed with MathML, TeX or asciimath) in the box below for a live preview.</p>  
       <textarea id="MathInput" cols="60" rows="10"
         (keyup)="Update()" style="margin-top:5px" [(ngModel)]="formula">
@@ -60,17 +130,27 @@
       <div id="MathPreview" style="border:1px solid; padding: 3px; width:50%; margin-top:5px"></div>
       <div id="MathBuffer" style="border:1px solid; padding: 3px; width:50%; margin-top:5px;
       visibility:hidden; position:absolute; top:0; left: 0"></div>  
-      <button md-raised-button (click)="saveTierLevel()">Save Formula</button>
+      <button md-raised-button (click)="saveFormula()">Save Formula</button>
+      <div id="fetchedFormula">
+        <ul>
+          <li *ngFor="let formula of formulaRefSnapshot | async">
+            
+            <div class="mathjax" >{{ formula.val().basic }}</div>
+          </li>
+        </ul>
+      </div>
+         
     </md-card>
-  <div id="fetchedFormula">
-    <!--<ul>
-      <li *ngFor="let item of items | async">
-        
-        <div class="mathjax" >{{ item.basic }}</div>
-      </li>
-    </ul>-->
-  </div>
+  
 
+ <!--<div id="fetchedFormula">
+        <ul>
+          <li *ngFor="let item of formula | async">
+            
+            <div class="mathjax" >{{ item.basic }}</div>
+          </li>
+        </ul>
+      </div>-->
 
   </div>
 

@@ -24,16 +24,19 @@ export class MembersComponent  {
     selectedTier: string='Single Tier';
 
   tiers= [
-    'Single Tier',
-    'Two Tier',
-    'Three Tier'
+    'Add First Tier',
+    'Add Second Tier',
+    'Add Third Tier',
+    'Add Formula'
   ];
 
   tier1 : Tier1;
   tier2 : Tier2;
   tier3 : Tier3;
 
-  selectedTier1Title : any;
+  selectedTier1Key : any;
+  selectedTier2Key : any;
+  selectedTier3Key : any;
 
   name: any;
   state: string = '';
@@ -49,6 +52,13 @@ export class MembersComponent  {
    contentsRef: FirebaseListObservable<any>;
    contentsRefSnapShot: FirebaseListObservable<any>;
    tier1Ref :FirebaseListObservable<any>;
+   formulaRef :FirebaseListObservable<any>;
+   formulaRefSnapshot :FirebaseListObservable<any>;
+   tier0RefSnapShot :FirebaseListObservable<any>;
+   tier1RefSnapShot :FirebaseListObservable<any>;
+   tier2RefSnapShot :FirebaseListObservable<any>;
+
+   
    
    objectItems : FirebaseObjectObservable<any>;
    firebaseFormula : any;
@@ -84,20 +94,59 @@ export class MembersComponent  {
     }
 
     addTier2(){
-      let tier1TitleKey : any;
-      this.contentsRefSnapShot.subscribe(snapshots => {
-        snapshots.forEach(snapshot => {
-          console.log("key"+snapshot.key);
-          console.log("value - title"+snapshot.val().tier1Title);
-          if(this.selectedTier1Title===snapshot.val().tier1Title){
-            tier1TitleKey=snapshot.key;
-          }  
-        });
-      });
-
-      if(tier1TitleKey!=null && tier1TitleKey!='' && tier1TitleKey!=undefined){
-        const tier1Ref =  this.db.list('/contents/'+tier1TitleKey);
+      
+      console.log(this.selectedTier1Key);
+      if(this.selectedTier1Key!=null && this.selectedTier1Key!='' && this.selectedTier1Key!=undefined){
+        const tier1Ref =  this.db.list('/contents/'+this.selectedTier1Key);
             tier1Ref.push({ tier2Title : this.tier2.title });
+      }
+    }
+
+    TierOptionChange(){
+      console.log("hello");
+      this.selectedTier1Key='';
+      this.selectedTier2Key='';
+      this.selectedTier3Key='';
+      
+    }
+
+    onTier1Change(){
+      console.log("working");
+      this.tier1RefSnapShot=this.db.list('/contents/'+this.selectedTier1Key, { preserveSnapshot: true });
+      if(document.getElementById("MathPreview")!=null && document.getElementById("MathPreview")!=undefined){
+        this.formula='';
+        document.getElementById("MathBuffer").innerHTML='';
+      this.formulaRefSnapshot=this.db.list('/formula/'+this.selectedTier1Key, { preserveSnapshot: true });
+      this.formulaRefSnapshot.subscribe((data)=>{
+         if(data!=null){
+      let mathjax=document.getElementsByClassName('mathjax');
+       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+      eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+    }
+      })
+      }
+    }
+
+    onTier2Change(){
+      this.tier2RefSnapShot=this.db.list('/contents/'+this.selectedTier1Key+'/'+this.selectedTier2Key, { preserveSnapshot: true });
+      if(document.getElementById("MathPreview")!=null && document.getElementById("MathPreview")!=undefined){
+        this.formula='';
+        document.getElementById("MathBuffer").innerHTML='';
+      this.formulaRefSnapshot=this.db.list('/formula/'+this.selectedTier1Key+'/'+this.selectedTier2Key, { preserveSnapshot: true });
+       this.formulaRefSnapshot.subscribe((data)=>{
+         if(data!=null){
+      let mathjax=document.getElementsByClassName('mathjax');
+       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+      eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+    }
+      })
+      }
+    }
+
+    addTier3(){
+       if(this.selectedTier2Key!=null && this.selectedTier2Key!='' && this.selectedTier2Key!=undefined){
+        const tier1Ref =  this.db.list('/contents/'+this.selectedTier1Key+'/'+this.selectedTier2Key);
+            tier1Ref.push({ tier3Title : this.tier3.title });
       }
     }
     
@@ -106,8 +155,28 @@ export class MembersComponent  {
   
 
    saveFormula(){
-     const formulas = this.db.list('/algebra');
-     formulas.push({ basic : this.formula });
+     
+     if(this.selectedTier1Key!='' && this.selectedTier2Key!='' && this.selectedTier3Key!='' ){
+     this.formulaRef = this.db.list('/formula/'+this.selectedTier1Key+'/'+this.selectedTier2Key+'/'+this.selectedTier3Key);
+     this.formulaRef.push({ basic : this.formula,
+      tier1Key : this.selectedTier1Key,
+      tier2key : this.selectedTier2Key,
+      tier3key : this.selectedTier3Key });
+     }
+
+     else  if(this.selectedTier1Key!='' && this.selectedTier2Key!=''){
+        this.formulaRef = this.db.list('/formula/'+this.selectedTier1Key+'/'+this.selectedTier2Key);
+        this.formulaRef.push({ basic : this.formula,
+          tier1Key : this.selectedTier1Key,
+          tier2key : this.selectedTier2Key });
+        }
+
+         else  if(this.selectedTier1Key!=''){
+        this.formulaRef = this.db.list('/formula/'+this.selectedTier1Key);
+        this.formulaRef.push({ basic : this.formula,
+          tier1Key : this.selectedTier1Key });
+        }
+     
    }
 
    saveTierLevel(){
@@ -162,6 +231,8 @@ export class MembersComponent  {
     The callback function is set up below, after the Preview object is set up.
   */
   Update(){
+    this.preview = document.getElementById("MathPreview");
+    this.buffer = document.getElementById("MathBuffer");
     console.log("update");
     if (this.timeout) {
       clearTimeout(this.timeout)
