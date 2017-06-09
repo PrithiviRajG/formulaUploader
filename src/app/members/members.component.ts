@@ -54,6 +54,8 @@ export class MembersComponent  {
    tier1Ref :FirebaseListObservable<any>;
    formulaRef :FirebaseListObservable<any>;
    formulaRefSnapshot :FirebaseListObservable<any>;
+   notesRef :FirebaseListObservable<any>;
+   notesRefSnapshot :FirebaseListObservable<any>;
    tier0RefSnapShot :FirebaseListObservable<any>;
    tier1RefSnapShot :FirebaseListObservable<any>;
    tier2RefSnapShot :FirebaseListObservable<any>;
@@ -116,6 +118,7 @@ export class MembersComponent  {
       if(document.getElementById("MathPreview")!=null && document.getElementById("MathPreview")!=undefined){
         this.formula='';
         document.getElementById("MathBuffer").innerHTML='';
+
       this.formulaRefSnapshot=this.db.list('/formula/'+this.selectedTier1Key, { preserveSnapshot: true });
       this.formulaRefSnapshot.subscribe((data)=>{
          if(data!=null){
@@ -124,6 +127,16 @@ export class MembersComponent  {
       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
     }
       })
+
+       this.notesRefSnapshot=this.db.list('/notes/'+this.selectedTier1Key, { preserveSnapshot: true });
+      this.notesRefSnapshot.subscribe((data)=>{
+         if(data!=null){
+      let mathjax=document.getElementsByClassName('mathjax');
+       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+      eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+    }
+      })
+
       }
     }
 
@@ -132,6 +145,7 @@ export class MembersComponent  {
       if(document.getElementById("MathPreview")!=null && document.getElementById("MathPreview")!=undefined){
         this.formula='';
         document.getElementById("MathBuffer").innerHTML='';
+
       this.formulaRefSnapshot=this.db.list('/formula/'+this.selectedTier1Key+'/'+this.selectedTier2Key, { preserveSnapshot: true });
        this.formulaRefSnapshot.subscribe((data)=>{
          if(data!=null){
@@ -139,7 +153,17 @@ export class MembersComponent  {
        eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
     }
-      })
+      });
+
+           this.notesRefSnapshot=this.db.list('/notes/'+this.selectedTier1Key+'/'+this.selectedTier2Key, { preserveSnapshot: true });
+       this.notesRefSnapshot.subscribe((data)=>{
+         if(data!=null){
+      let mathjax=document.getElementsByClassName('mathjax');
+       eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+      eval('MathJax.Hub.Queue(["Typeset",MathJax.Hub, mathjax])');
+    }
+      });
+
       }
     }
 
@@ -174,6 +198,30 @@ export class MembersComponent  {
          else  if(this.selectedTier1Key!=''){
         this.formulaRef = this.db.list('/formula/'+this.selectedTier1Key);
         this.formulaRef.push({ basic : this.formula,
+          tier1Key : this.selectedTier1Key });
+        }
+     
+   }
+
+   saveNotes(){
+     if(this.selectedTier1Key!='' && this.selectedTier2Key!='' && this.selectedTier3Key!='' ){
+     this.notesRef = this.db.list('/notes/'+this.selectedTier1Key+'/'+this.selectedTier2Key+'/'+this.selectedTier3Key);
+     this.notesRef.push({ note : this.formula,
+      tier1Key : this.selectedTier1Key,
+      tier2key : this.selectedTier2Key,
+      tier3key : this.selectedTier3Key });
+     }
+
+     else  if(this.selectedTier1Key!='' && this.selectedTier2Key!=''){
+        this.notesRef = this.db.list('/notes/'+this.selectedTier1Key+'/'+this.selectedTier2Key);
+        this.notesRef.push({ note : this.formula,
+          tier1Key : this.selectedTier1Key,
+          tier2key : this.selectedTier2Key });
+        }
+
+         else  if(this.selectedTier1Key!=''){
+        this.notesRef = this.db.list('/formula/'+this.selectedTier1Key);
+        this.notesRef.push({ note : this.formula,
           tier1Key : this.selectedTier1Key });
         }
      
